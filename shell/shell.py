@@ -20,7 +20,6 @@ while True:
             os.write(2, ("fork failed, returning %d\n" % rc).encode())
             sys.exit(1)
         elif rc == 0:                   # child
-            #os.write(1, ("I am child.  My pid==%d.  Parent's pid=%d\n" % (os.getpid(), pid)).encode())
             
             args = keyboard.split()
             for dir in re.split(":", os.environ['PATH']): # try each directory in the path
@@ -30,9 +29,9 @@ while True:
                 except FileNotFoundError:             # ...expected
                     pass                              # ...fail quietly
         
-            os.write(2, ("Child:    Could not exec %s\n" % args[0]).encode())
+            os.write(2, ("Child says: Could not excecute the following command  %s\n" % args).encode())
             sys.exit(1)                 # terminate with error if execve could not run program
             
         else:                           # parent
             child = os.wait()
-            os.write(1, ("Parent: Child %d terminated with exit code %d\n" %child).encode())
+            os.write(1, ("Parent says: Child %d terminated with exit code %d\n" %child).encode())
