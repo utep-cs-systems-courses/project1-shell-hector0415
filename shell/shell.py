@@ -21,7 +21,7 @@ while True:
             sys.exit(1)
         elif rc == 0:                   # child
             os.write(1, ("I am child.  My pid==%d.  Parent's pid=%d\n" % (os.getpid(), pid)).encode())
-            os.write(1, ("Oh no! I have to exit now :(").encode()))
+            os.write(1, ("Oh no! I must be going now...").encode())
             #<<exec code goes here>>
             
             sys.exit(0) # exit(0) if we were able to run the program. Change later to 
