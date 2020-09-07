@@ -11,13 +11,11 @@ while True:
     if(keyboard == "exit"):
         sys.exit(0)
     else:
-        
-        os.write(1, ("About to fork (pid:%d)\n" % pid).encode())
-        
+ 
         rc = os.fork()
         
         if rc < 0:
-            os.write(2, ("fork failed, returning %d\n" % rc).encode())
+            os.write(2, ("forking failed, returning %d\n" % rc).encode())
             sys.exit(1)
         elif rc == 0:                   # child
             
@@ -29,7 +27,7 @@ while True:
                 except FileNotFoundError:             # ...expected
                     pass                              # ...fail quietly
         
-            os.write(2, ("Child says: Could not excecute the following command  %s\n" % args).encode())
+            os.write(2, ("Child says: Could not excecute the following command \"%s\"\n" % keyboard).encode())
             sys.exit(1)                 # terminate with error if execve could not run program
             
         else:                           # parent
