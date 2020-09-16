@@ -80,8 +80,8 @@ def execute_keyboard(command):
     else:                           # parent
         if wait:
             child = os.wait()
-            if child[1] != 0:
-                os.write(2, ("terminated with exit code %d\n" %child[1]).encode())
+            #if child[1] != 0:
+            #    os.write(2, ("terminated with exit code %d\n" %child[1]).encode())
         return False
         
             
@@ -95,7 +95,7 @@ def execute_command(command):
             except FileNotFoundError:             # ...expected
                 pass                              # ...fail quietly
                 
-    os.write(2, ("Could not excecute the following command \"%s\"\n" % command).encode())
+    #os.write(2, ("Could not excecute the following command \"%s\"\n" % command).encode())
     sys.exit(1)                 # terminate with error if execve could not run program
         
         
@@ -103,8 +103,8 @@ def change_directory(command):
     cmd = command.split(' ',1)
     if len(cmd) > 1:
         os.chdir(cmd[1])
-    else:
-        os.write(1,("No directory was specified, nothing was done").encode())
+    #else:
+       # os.write(1,("No directory was specified, nothing was done").encode())
 #end of change_directory
 
 def parse_pipe(command):
