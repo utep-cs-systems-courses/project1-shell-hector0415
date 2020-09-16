@@ -116,6 +116,9 @@ def parse_redirects(command):
     fileIn = ""
     fileOut = ""
     
+    if '>' not in command and '<' not in command: #when no redirects found
+        return command.strip(),fileIn,fileOut
+    
     if '>' in command:
         cmd,fileOut = command.split('>',1)
     
