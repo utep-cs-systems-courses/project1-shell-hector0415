@@ -82,6 +82,7 @@ def execute_keyboard(command):
             child = os.wait()
             if child[1] != 0:
                 os.write(2, ("terminated with exit code %d\n" %child[1]).encode())
+        return False
         
             
 def execute_command(command):
@@ -118,6 +119,14 @@ def parse_redirects(command):
     
     if '>' not in command and '<' not in command: #when no redirects found
         return command.strip(),fileIn,fileOut
+    
+    if '>' in command and '<' not in command:
+        cmd,fileOut = command.split('>',1)
+        return cmd.strip(),fileIn.strip(),fileOut.strip()
+    
+    if '<' in command and '>' not in command:
+        cmd,fileIn = command.split('<',1)
+        return cmd.strip(),fileIn.strip(),fileOut.strip()
     
     if '>' in command:
         cmd,fileOut = command.split('>',1)
