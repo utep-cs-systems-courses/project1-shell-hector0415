@@ -59,11 +59,11 @@ def execute_keyboard(command):
             #non-pipe execute
             command,file_in,file_out = parse_redirects(command)
             
-            if file_in== "": #open and redirect std in if needed
+            if file_in != "": #open and redirect std in if needed
                 std_in = os.dup(0)
                 fd_fin = os.open(file_in, os.O_RDONLY)
                 os.dup2(fd_fin,0)
-            if file_out== "": #open and redirect std out if needed
+            if file_out != "": #open and redirect std out if needed
                 std_out = os.dup(1)
                 fd_fout = os.open(file_out, os.O_CREAT | os.O_WRONLY)
                 os.dup2(fd_fout, 1)
