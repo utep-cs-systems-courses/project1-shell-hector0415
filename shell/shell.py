@@ -6,7 +6,7 @@ import os, sys, re
 def main():
     while True:
         os.write(1, sys.ps1.encode())
-        keyboard = input().strip()
+        keyboard = os.read(0,1024).decode().strip()
         
         if keyboard == "": #no input
             pass
