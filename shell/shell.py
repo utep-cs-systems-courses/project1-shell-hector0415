@@ -6,8 +6,13 @@ import os, sys, re
 def main():
     while True:
         os.write(1, sys.ps1.encode())
-        keyboard = os.read(0,1024).decode().strip()
-        
+        keyboard = os.read(0,1024).decode()
+
+        if keyboard[-1] == '\n':
+            keyboard = keyboard[0:-1]
+
+        keyboard = keyboard.strip()
+            
         if keyboard == "": #no input
             pass
         
