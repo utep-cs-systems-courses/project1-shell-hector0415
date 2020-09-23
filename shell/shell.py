@@ -2,29 +2,25 @@
 
 import os, sys, re
 
-
 def main():
     while True:
         os.write(1, sys.ps1.encode())
-        keyboard = os.read(0,1024).decode()
+        keyboard = os.read(0,1024)
 
-        if keyboard[-1] == '\n':
-            keyboard = keyboard[0:-1]
+        keyInput = keyboard.decode().strip()
 
-        keyboard = keyboard.strip()
-            
-        if keyboard == "": #no input
+        if keyInput == "": #no input
             pass
         
-        elif keyboard.strip() == "exit": #leave shell
+        elif keyInput.lower() == "exit": #leave shell
             sys.exit(0)
             break
-
-        elif "cd" in keyboard: #change directory
-            change_directory(keyboard)
-
+            
+        elif "cd" in keyInput: #change directory
+            change_directory(keyInput)
+            
         else: #not predefined command
-            execute_keyboard(keyboard)
+            execute_keyboard(keyInput)
 #end of main
                 
 def execute_keyboard(command):
@@ -44,6 +40,9 @@ def execute_keyboard(command):
             command_one, command_two = parse_pipe(command)
             
             pipe_read,pipe_write = os.pipe() #create pipe
+
+            os.set_inheritable(pipe_read,True)
+            os.set_inheritable(pipe_write,True)
             
             std_in = os.dup(0) #make copies of both fd 0 and fd 1
             std_out = os.dup(1)
@@ -85,10 +84,8 @@ def execute_keyboard(command):
     else:                           # parent
         if wait:
             child = os.wait()
-            #if child[1] != 0:
-            #    os.write(2, ("terminated with exit code %d\n" %child[1]).encode())
-        return False
         
+    
             
 def execute_command(command):
     args = command.split()
@@ -100,7 +97,7 @@ def execute_command(command):
             except FileNotFoundError:             # ...expected
                 pass                              # ...fail quietly
                 
-    #os.write(2, ("Could not excecute the following command \"%s\"\n" % command).encode())
+    os.write(2, ("Could not excecute the following command \"%s\"\n" % command).encode())
     sys.exit(1)                 # terminate with error if execve could not run program
         
         
@@ -108,8 +105,8 @@ def change_directory(command):
     cmd = command.split(' ',1)
     if len(cmd) > 1:
         os.chdir(cmd[1])
-    #else:
-       # os.write(1,("No directory was specified, nothing was done").encode())
+    else:
+        os.write(2,("No directory was specified, nothing was done").encode())
 #end of change_directory
 
 def parse_pipe(command):
@@ -150,8 +147,8 @@ if __name__ == '__main__':
     try:
         sys.ps1 = os.environ['PS1']
     except KeyError:
-        sys.ps1 = '$ '
+        sys.ps1 = "$ "
     if sys.ps1 is None:
-        sys.ps1 = '$ '
+        sys.ps1 = "$ "
 
     main()
